@@ -1,25 +1,68 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import "./App.css";
+import { nutrition } from "./data";
+import CreateForm from "./components/CreateForm";
+import TableRow from "./components/TableRow";
+import TableHeader from "./components/TableHeader";
 
-function App() {
+const App = () => {
+  const [data, setData] = useState(nutrition);
+  const [formData, setFormData] = useState({
+    name: "",
+    calories: "",
+    carbohydrate: "",
+    fat: "",
+    protein: "",
+  });
+
+  const handleOnChange = (e) => {
+    const inputValue = e.target.value;
+    const inputField = e.target.name;
+    setFormData({ ...formData, [inputField]: inputValue });
+  };
+
+  const handleCreate = () => {
+    setData([...data, { ...formData, id: Date.now() }]);
+    setFormData({
+      name: "",
+      calories: "",
+      carbohydrate: "",
+      fat: "",
+      protein: "",
+    });
+  };
+
+  const handleUpdate = (product) => {
+    const newData = data.map((ele) => (ele.id === product.id ? product : ele));
+    setData(newData);
+  };
+
+  const handleRemove = (product) => {
+    const newData = data.filter((ele) => {
+      return ele.id !== product.id;
+    });
+    setData(newData);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="table-container">
+        <TableHeader />
+        {data.map((product) => {
+          return (
+            <TableRow
+              product={product}
+              key={product.id}
+              handleUpdate={handleUpdate}
+              handleRemove={handleRemove}
+            />
+          );
+        })}
+      </div>
+      <hr></hr>
+      <CreateForm handleOnChange={handleOnChange} handleCreate={handleCreate} />
     </div>
   );
-}
+};
 
 export default App;
