@@ -7,29 +7,9 @@ import TableHeader from "./components/TableHeader";
 
 const App = () => {
   const [data, setData] = useState(nutrition);
-  const [formData, setFormData] = useState({
-    name: "",
-    calories: "",
-    carbohydrate: "",
-    fat: "",
-    protein: "",
-  });
 
-  const handleOnChange = (e) => {
-    const inputValue = e.target.value;
-    const inputField = e.target.name;
-    setFormData({ ...formData, [inputField]: inputValue });
-  };
-
-  const handleCreate = () => {
-    setData([...data, { ...formData, id: Date.now() }]);
-    setFormData({
-      name: "",
-      calories: "",
-      carbohydrate: "",
-      fat: "",
-      protein: "",
-    });
+  const handleCreate = (productData) => {
+    setData([...data, { ...productData, id: Date.now() }]);
   };
 
   const handleUpdate = (product) => {
@@ -60,7 +40,7 @@ const App = () => {
         })}
       </div>
       <hr></hr>
-      <CreateForm handleOnChange={handleOnChange} handleCreate={handleCreate} />
+      <CreateForm handleCreate={handleCreate} />
     </div>
   );
 };

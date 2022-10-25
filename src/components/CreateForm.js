@@ -1,12 +1,34 @@
-import { useRef } from "react";
+import { useState, useRef } from "react";
 
-const CreateForm = ({ handleOnChange, handleCreate }) => {
+const CreateForm = ({ handleCreate }) => {
+  const [formData, setFormData] = useState({
+    name: "",
+    calories: "",
+    carbohydrate: "",
+    fat: "",
+    protein: "",
+  });
   const form = useRef(null);
 
+  const handleOnChange = (e) => {
+    const inputValue = e.target.value;
+    const inputField = e.target.name;
+    setFormData({ ...formData, [inputField]: inputValue });
+  };
+
   const createProduct = (e) => {
-    e.preventDefault();
-    handleCreate();
-    form.current.reset();
+    if (formData.name !== "") {
+      e.preventDefault();
+      handleCreate(formData);
+      setFormData({
+        name: "",
+        calories: "",
+        carbohydrate: "",
+        fat: "",
+        protein: "",
+      });
+      form.current.reset();
+    }
   };
 
   return (
